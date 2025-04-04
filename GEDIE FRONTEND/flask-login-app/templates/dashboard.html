@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Gastos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <img src="{{ url_for('static', filename='img/logo-small.png') }}" alt="Logo" class="navbar-logo">
+                <span class="navbar-title">Controle Financeiro</span>
+            </div>
+            <div class="navbar-menu">
+                <a href="#" class="navbar-link active"><i class="icon-dashboard"></i> Dashboard</a>
+                <a href="#" class="navbar-link"><i class="icon-transactions"></i> Transações</a>
+                <a href="#" class="navbar-link"><i class="icon-reports"></i> Relatórios</a>
+                <a href="#" class="navbar-link"><i class="icon-settings"></i> Configurações</a>
+            </div>
+            <div class="navbar-user">
+                <span class="user-name">{{ user.name }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn"><i class="icon-logout"></i> Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="dashboard-container">
+            <div class="dashboard-box">
+                <!-- Conteúdo removido do header original -->
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            
+            <div class="dashboard-content">
+                <div class="financial-summary">
+                    <h3>Resumo Financeiro</h3>
+                    <div class="summary-cards">
+                        <div class="card">
+                            <h4>Saldo Atual</h4>
+                            <p class="balance-positive">R$ 4,250.00</p>
+                        </div>
+                        <div class="card">
+                            <h4>Receitas (Mês)</h4>
+                            <p class="income">R$ 5,000.00</p>
+                        </div>
+                        <div class="card">
+                            <h4>Despesas (Mês)</h4>
+                            <p class="expense">R$ 750.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-box">
+                        <h4>Distribuição de Gastos (Abril)</h4>
+                        <canvas id="expensesChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h4>Histórico Mensal (2023)</h4>
+                        <canvas id="monthlyHistoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="recent-transactions">
+                    <h3>Últimas Transações</h3>
+                    <div class="transactions-list">
+                        <div class="transaction-item expense">
+                            <div class="transaction-info">
+                                <span class="transaction-description">Supermercado</span>
+                                <span class="transaction-category">Alimentação</span>
+                                <span class="transaction-date">15/04/2023</span>
+                            </div>
+                            <span class="transaction-amount">- R$ 320.50</span>
+                        </div>
+                        <div class="transaction-item income">
+                            <div class="transaction-info">
+                                <span class="transaction-description">Salário</span>
+                                <span class="transaction-category">Rendimento</span>
+                                <span class="transaction-date">10/04/2023</span>
+                            </div>
+                            <span class="transaction-amount">+ R$ 5,000.00</span>
+                        </div>
+                        <div class="transaction-item expense">
+                            <div class="transaction-info">
+                                <span class="transaction-description">Restaurante</span>
+                                <span class="transaction-category">Alimentação</span>
+                                <span class="transaction-date">08/04/2023</span>
+                            </div>
+                            <span class="transaction-amount">- R$ 85.30</span>
+                        </div>
+                        <div class="transaction-item expense">
+                            <div class="transaction-info">
+                                <span class="transaction-description">Combustível</span>
+                                <span class="transaction-category">Transporte</span>
+                                <span class="transaction-date">05/04/2023</span>
+                            </div>
+                            <span class="transaction-amount">- R$ 200.00</span>
+                        </div>
+                        <div class="transaction-item expense">
+                            <div class="transaction-info">
+                                <span class="transaction-description">Assinaturas</span>
+                                <span class="transaction-category">Lazer</span>
+                                <span class="transaction-date">01/04/2023</span>
+                            </div>
+                            <span class="transaction-amount">- R$ 144.20</span>
+                        </div>
+                    </div>
+                    <a href="#" class="view-all-btn">Ver todas as transações</a>
+                </div>
+
+                <div class="quick-actions">
+                    <h3>Ações Rápidas</h3>
+                    <div class="action-buttons">
+                        <a href="#" class="action-btn add-income">Adicionar Receita</a>
+                        <a href="#" class="action-btn add-expense">Adicionar Despesa</a>
+                        <a href="#" class="action-btn generate-report">Gerar Relatório</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gráfico de Pizza - Distribuição de Gastos
+        const expensesCtx = document.getElementById('expensesChart').getContext('2d');
+        const expensesChart = new Chart(expensesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Alimentação', 'Transporte', 'Lazer', 'Moradia', 'Saúde'],
+                datasets: [{
+                    data: [405.80, 200.00, 144.20, 0, 0],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: R$ ${context.raw.toFixed(2)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Barras - Histórico Mensal
+        const historyCtx = document.getElementById('monthlyHistoryChart').getContext('2d');
+        const monthlyHistoryChart = new Chart(historyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr'],
+                datasets: [
+                    {
+                        label: 'Receitas',
+                        data: [4500, 4800, 5000, 5000],
+                        backgroundColor: '#2ecc71',
+                        borderColor: '#27ae60',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Despesas',
+                        data: [1200, 1500, 1800, 750],
+                        backgroundColor: '#e74c3c',
+                        borderColor: '#c0392b',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: R$ ${context.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
