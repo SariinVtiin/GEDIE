@@ -5,6 +5,8 @@ from keyboards.inline import get_main_keyboard
 import os
 import uuid
 from datetime import datetime
+import threading
+from services.ocr_processor import process_receipt
 
 async def handle_send_image(update: Update, context: CallbackContext):  # <--- ADICIONE ESTA FUNÇÃO
     """Inicia o processo de envio de imagem"""
@@ -34,6 +36,12 @@ async def receive_image(update: Update, context: CallbackContext):
             await file.download_to_drive(file_path)
             
             await update.message.reply_text(translations[language]['image_success'])
+
+            threading.Thread(
+                target=process_receipt,
+                args=(file_path,)
+            ).start()
+
         else:
             await update.message.reply_text(translations[language]['image_error'])
     

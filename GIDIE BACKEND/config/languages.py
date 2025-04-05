@@ -25,7 +25,8 @@ translations = {
         'image_success': '✅ Imagem recebida!',
         'image_error': '❌ Isso não parece ser uma imagem válida.',
         'db_error': '⚠️ Ocorreu um erro interno. Tente novamente mais tarde.',
-        'saved_expense': '✅ Salvo: R${amount} em {category}'
+        'saved_expense': '✅ Salvo: R${amount} em {category}',
+        'auto_category': '🦾 Reconhecimento Automático'
     },
     'en': {
         'greeting': 'Hello! Choose an option:',
@@ -53,6 +54,7 @@ translations = {
         'image_success': '✅ Image received!',
         'image_error': '❌ This doesn\'t look like a valid image.',
         'db_error': '⚠️ An internal error occurred. Please try again later.',
-        'saved_expense': '✅ Saved: ${amount} in {category}'
+        'saved_expense': '✅ Saved: ${amount} in {category}',
+        'auto_category': '🦾 Auto Recognition'
     }
 }
