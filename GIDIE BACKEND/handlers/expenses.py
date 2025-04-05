@@ -12,6 +12,7 @@ async def handle_buttons(update: Update, context: CallbackContext):
     
     language = context.user_data.get('language', 'pt')
     amount = context.user_data.get('amount')
+    description = context.user_data.get('description', "")  # Captura a descrição
     
     if not query.data.startswith("CATEGORY_"):
         return
@@ -24,20 +25,22 @@ async def handle_buttons(update: Update, context: CallbackContext):
         return
     
     try:
-        # REMOVIDO O receipt_path
+        # →→→ Adicione o parâmetro 'description' ←←←
         success = insert_expense(
             user_id=query.message.chat_id,
             amount=amount,
             category=query.data,
-            description=context.user_data.get('description', "")
+            description=description
         )
         
         if success:
-            context.user_data.clear()  # Limpeza total
             await context.bot.send_message(
                 chat_id=query.message.chat_id,
-                text=f"✅ {translations[language]['saved_expense']}",
-                reply_markup=get_main_keyboard(language)  # Adicionado
+                text=translations[language]['saved_expense'].format(
+                    amount=f"{amount:.2f}",
+                    category=query.data.replace('CATEGORY_', '')
+                ),
+                reply_markup=get_post_registration_keyboard(language)
             )
         else:
             await context.bot.send_message(
@@ -51,7 +54,7 @@ async def handle_buttons(update: Update, context: CallbackContext):
             text=translations[language]['db_error']
         )
     
-    context.user_data.clear()
+    context.user_data.clear()  # Limpa todos os dados
 
 async def handle_enter_value(update: Update, context: CallbackContext):
     """Solicita valor com exemplo integrado"""
@@ -69,6 +72,16 @@ async def handle_enter_value(update: Update, context: CallbackContext):
 
 async def save_expense(update: Update, context: CallbackContext):
     """Processa valor e descrição em uma única mensagem"""
+   
+    language = context.user_data.get('language', 'pt')
+
+    if 'current_flow' in context.user_data:
+        await update.message.reply_text(
+            translations[language]['wrong_flow'],
+            reply_markup=get_main_keyboard(language)
+        )
+        return
+
     language = context.user_data.get('language', 'pt')
     user_input = update.message.text.strip()
     
@@ -78,7 +91,7 @@ async def save_expense(update: Update, context: CallbackContext):
         amount_str = parts[0].replace(',', '.')  # Suporta ambas as notações decimais
         
         # Converte para float
-        amount = float(amount_str)
+        amount = float(update.message.text.split()[0].replace(',', '.'))
         description = parts[1] if len(parts) > 1 else ""
         
         # Armazena no contexto

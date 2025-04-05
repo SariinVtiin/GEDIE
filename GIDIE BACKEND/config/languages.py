@@ -33,7 +33,25 @@ translations = {
         'skip_description': '⏭ Pular descrição',
         'select_category': '🗂️ Selecione a categoria da despesa:',
         'saved_expense': 'Despesa registrada com sucesso!',
-        'auto_category': '🦾 Reconhecimento Automático'
+        'auto_category': '🦾 Reconhecimento Automático',
+        'add_card': '💳 Cadastrar Cartão',
+        'enter_card_details': '🔢 *Digite os 4 últimos dígitos do cartão:*\nEx: 4321 ou 4321 Nubank',
+        'card_added': '✅ Cartão cadastrado com sucesso!',
+        'invalid_card_format': '❌ Formato inválido! Use 4 dígitos + apelido opcional',
+        'card_error': '⚠️ Erro ao cadastrar cartão',
+        'my_cards': '💳 Meus Cartões',
+        'your_cards': '📇 Seus Cartões Cadastrados:',
+        'no_cards': 'Você não tem cartões cadastrados.',
+        'card_item': '• {nickname} (···{last_four})',
+        'wrong_flow': '⚠️ Conclua o cadastro do cartão primeiro!',
+        'card_success': "✅ Cartão cadastrado!",
+        'back_to_settings': "⚙️ Voltar às configurações",
+        'enter_card_details': (
+            "💳 *Como cadastrar seu cartão:*\n"
+            "1. Digite os **4 últimos dígitos** do cartão\n"
+            "2. (Opcional) Adicione um apelido\n\n"
+            "Exemplo: `4321 Nubank` ou apenas `4321`"
+        ),
     },
     'en': {
         'greeting': 'Hello! Choose an option:',
@@ -69,6 +87,24 @@ translations = {
         'skip_description': '⏭ Skip description',
         'select_category': '🗂️ Select expense category:',
         'saved_expense': 'Expense saved successfully!',
-        'auto_category': '🦾 Auto Recognition'
+        'auto_category': '🦾 Auto Recognition',
+        'add_card': '💳 Add Credit Card',
+        'enter_card_details': '🔢 *Enter last 4 digits:*\nEx: 4321 or 4321 Nubank',
+        'card_added': '✅ Card registered successfully!',
+        'invalid_card_format': '❌ Invalid format! Use 4 digits + optional nickname',
+        'card_error': '⚠️ Error saving card',
+        'my_cards': '💳 My Cards',
+        'your_cards': '📇 Your Registered Cards:',
+        'no_cards': 'You have no registered cards.',
+        'card_item': '• {nickname} (···{last_four})',
+        'wrong_flow': '⚠️ Complete the card registration first!',
+        'card_success': "✅ Card registered!",
+        'back_to_settings': "⚙️ Back to settings",
+        'enter_card_details': (
+            "💳 *How to register your card:*\n"
+            "1. Enter the **last 4 digits**\n"
+            "2. (Optional) Add a nickname\n\n"
+            "Example: `4321 Nubank` or just `4321`"
+        ),
     }
 }

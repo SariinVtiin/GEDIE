@@ -11,11 +11,15 @@ def get_main_keyboard(language='pt'):
     return InlineKeyboardMarkup(keyboard)
 
 def get_settings_keyboard(language='pt'):
-    keyboard = [
+    return InlineKeyboardMarkup([
         [InlineKeyboardButton(translations[language]['change_language'], callback_data="change_language")],
-        [InlineKeyboardButton(translations[language]['back_to_main'], callback_data="back_to_main")]
-    ]
-    return InlineKeyboardMarkup(keyboard)
+        [InlineKeyboardButton(translations[language]['add_card'], callback_data="add_credit_card")],
+        [InlineKeyboardButton(translations[language]['my_cards'], callback_data="list_cards")],
+        [
+            InlineKeyboardButton(translations[language]['back_to_main'], callback_data="back_to_main"),
+            InlineKeyboardButton(translations[language]['back_to_settings'], callback_data="open_settings")
+        ]
+    ])
 
 def get_categories_keyboard(language='pt'):
     return InlineKeyboardMarkup([
@@ -42,3 +46,13 @@ def get_description_keyboard(language='pt'):
             callback_data="skip_description"
         )]
     ])
+
+def get_card_delete_keyboard(cards, language='pt'):
+    buttons = [
+        [InlineKeyboardButton(
+            f"❌ {card['nickname']} (···{card['last_four']})", 
+            callback_data=f"delete_card_{card['card_id']}"
+        )] for card in cards
+    ]
+    buttons.append([InlineKeyboardButton(translations[language]['back'], callback_data="cancel_delete")])
+    return InlineKeyboardMarkup(buttons)

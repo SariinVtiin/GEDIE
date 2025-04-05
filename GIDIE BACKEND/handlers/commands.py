@@ -3,11 +3,13 @@ from telegram.ext import CallbackContext
 from keyboards.inline import get_main_keyboard
 from config.languages import translations
 from keyboards.inline import get_settings_keyboard
+from database.db import register_user
 
 async def start(update: Update, context: CallbackContext):
-    language = context.user_data.get('language', 'pt')
+    # →→→ Forçar 'language' a ser string (caso esteja corrompida) ←←←
+    language = str(context.user_data.get('language', 'pt')).strip()  # Converte para string
     await update.message.reply_text(
-        translations[language]['greeting'],
+        translations[language]['greeting'],  # Agora usa string
         reply_markup=get_main_keyboard(language)
     )
 
@@ -65,3 +67,10 @@ async def handle_settings(update: Update, context: CallbackContext):
         text=translations[language]['settings'],
         reply_markup=get_settings_keyboard(language)
     )
+
+    keyboard = [
+        [InlineKeyboardButton(translations[language]['change_language'], callback_data="change_language")],
+        [InlineKeyboardButton(translations[language]['add_card'], callback_data="add_credit_card")],  # Novo
+        [InlineKeyboardButton(translations[language]['back_to_main'], callback_data="back_to_main")]
+    ]
+
