@@ -33,7 +33,8 @@ def process_receipt(image_path: str) -> str:
         insert_expense(
             user_id=user_id,
             amount=total,
-            category="AUTO_RECOGNITION"
+            category="AUTO_RECOGNITION",
+            description=f"Registro automático - {os.path.basename(image_path)}"
         )
         
         return f"✅ Valor R${total:.2f} registrado automaticamente!"

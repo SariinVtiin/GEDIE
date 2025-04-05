@@ -26,6 +26,13 @@ translations = {
         'image_error': '❌ Isso não parece ser uma imagem válida.',
         'db_error': '⚠️ Ocorreu um erro interno. Tente novamente mais tarde.',
         'saved_expense': '✅ Salvo: R${amount} em {category}',
+        'settings': '⚙️ Configurações',
+        'invalid_format': '❌ Formato inválido! Use: VALOR [DESCRIÇÃO]\nEx: 958.80 Almoço ou 100,50',
+        'ask_amount': '💵 *Digite o valor da despesa:*\nEx: 50.99',
+        'ask_description': '📝 *Adicione uma descrição (opcional):*',
+        'skip_description': '⏭ Pular descrição',
+        'select_category': '🗂️ Selecione a categoria da despesa:',
+        'saved_expense': 'Despesa registrada com sucesso!',
         'auto_category': '🦾 Reconhecimento Automático'
     },
     'en': {
@@ -55,6 +62,13 @@ translations = {
         'image_error': '❌ This doesn\'t look like a valid image.',
         'db_error': '⚠️ An internal error occurred. Please try again later.',
         'saved_expense': '✅ Saved: ${amount} in {category}',
+        'settings': '⚙️ Settings',
+        'invalid_format': '❌ Invalid format! Use: AMOUNT [DESCRIPTION]\nEx: 958.80 Lunch or 100.50',
+        'ask_amount': '💵 *Enter the expense amount:*\nEx: 50.99',
+        'ask_description': '📝 *Add a description (optional):*',
+        'skip_description': '⏭ Skip description',
+        'select_category': '🗂️ Select expense category:',
+        'saved_expense': 'Expense saved successfully!',
         'auto_category': '🦾 Auto Recognition'
     }
 }

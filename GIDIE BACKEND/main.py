@@ -35,11 +35,13 @@ app.add_handler(CommandHandler("start", commands.start))
 app.add_handler(CallbackQueryHandler(commands.handle_exit, pattern="^exit$"))
 app.add_handler(CallbackQueryHandler(expenses.handle_enter_value, pattern="^enter_value$"))
 app.add_handler(CallbackQueryHandler(commands.handle_language_change, pattern="^change_language$"))
+app.add_handler(CallbackQueryHandler(commands.handle_settings, pattern="^open_settings$"))
 app.add_handler(CallbackQueryHandler(handle_language_selection, pattern="^set_language_"))
 app.add_handler(CallbackQueryHandler(commands.handle_post_registration, pattern="^(register_again|back_to_main)$"))
 app.add_handler(CallbackQueryHandler(images.handle_send_image, pattern="^send_image$"))  # Novo
 app.add_handler(MessageHandler(filters.PHOTO, images.receive_image))  # Novo
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, expenses.save_expense))
+app.add_handler(CallbackQueryHandler(expenses.skip_description,pattern="^skip_description$"))
 app.add_handler(CallbackQueryHandler(expenses.handle_buttons))
 
 IMAGE_FOLDER = "receipts"
