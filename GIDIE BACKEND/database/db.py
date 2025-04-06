@@ -104,7 +104,7 @@ def get_user_cards(user_id: int):
         cursor = conn.cursor(dictionary=True)
         
         cursor.execute(
-            "SELECT last_four, nickname FROM credit_cards WHERE user_id = %s",
+            "SELECT card_id, last_four, nickname FROM credit_cards WHERE user_id = %s",
             (user_id,)
         )
         return cursor.fetchall()

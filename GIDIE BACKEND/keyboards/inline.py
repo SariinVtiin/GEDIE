@@ -64,3 +64,35 @@ def get_payment_method_keyboard(language: str = 'pt'):
         [InlineKeyboardButton("📱 Pix", callback_data="PAYMENT_pix")]
     ]
     return InlineKeyboardMarkup(buttons)
+
+def get_user_cards_keyboard(cards, language='pt'):
+    """Cria um teclado com os cartões do usuário para seleção durante pagamento"""
+    buttons = [
+        [InlineKeyboardButton(
+            f"{card['nickname']} (···{card['last_four']})", 
+            callback_data=f"select_card_{card['card_id']}"
+        )] for card in cards
+    ]
+    buttons.append([InlineKeyboardButton(
+        translations[language].get('cancel', "Cancelar"), 
+        callback_data="cancel_payment"
+    )])
+    return InlineKeyboardMarkup(buttons)
+
+def get_card_registration_keyboard(language='pt'):
+    """Cria um teclado para opções após informar que não há cartões"""
+    buttons = [
+        [InlineKeyboardButton(
+            translations[language].get('add_card', "Adicionar Cartão"), 
+            callback_data="add_credit_card"
+        )],
+        [InlineKeyboardButton(
+            translations[language].get('change_payment', "Mudar Método de Pagamento"), 
+            callback_data="change_payment_method"
+        )],
+        [InlineKeyboardButton(
+            translations[language].get('cancel', "Cancelar"), 
+            callback_data="cancel_payment"
+        )]
+    ]
+    return InlineKeyboardMarkup(buttons)

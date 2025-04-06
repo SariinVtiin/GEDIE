@@ -15,6 +15,7 @@ from database.db import create_table
 from handlers.commands import handle_exit
 from keyboards.inline import get_main_keyboard  # Importe o teclado
 from config.languages import translations  # Importe as traduções
+from handlers.expenses import handle_card_selection, handle_cancel_payment, handle_change_payment_method
        
 from handlers import cards
 
@@ -48,6 +49,9 @@ app.add_handler(CallbackQueryHandler(commands.handle_post_registration, pattern=
 app.add_handler(CallbackQueryHandler(images.handle_send_image, pattern="^send_image$"))
 app.add_handler(CallbackQueryHandler(expenses.skip_description, pattern="^skip_description$"))
 app.add_handler(CallbackQueryHandler(cards.list_cards, pattern="^list_cards$"))
+app.add_handler(CallbackQueryHandler(handle_card_selection, pattern="^select_card_"))
+app.add_handler(CallbackQueryHandler(handle_cancel_payment, pattern="^cancel_payment$"))
+app.add_handler(CallbackQueryHandler(handle_change_payment_method, pattern="^change_payment_method$"))
 
 # Handler genérico de CallbackQuery (SEM pattern, por último)
 app.add_handler(CallbackQueryHandler(expenses.handle_buttons))  # Categorias
