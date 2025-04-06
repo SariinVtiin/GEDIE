@@ -46,6 +46,8 @@ translations = {
         'wrong_flow': '⚠️ Conclua o cadastro do cartão primeiro!',
         'card_success': "✅ Cartão cadastrado!",
         'back_to_settings': "⚙️ Voltar às configurações",
+        'select_payment_method': '💸 *Como você pagou?*',
+        'saved_expense': '✅ **Gasto salvo!**\n\nValor: R$ {amount}\nCategoria: {category}\nMétodo: {payment_method}',        
         'enter_card_details': (
             "💳 *Como cadastrar seu cartão:*\n"
             "1. Digite os **4 últimos dígitos** do cartão\n"
@@ -100,6 +102,8 @@ translations = {
         'wrong_flow': '⚠️ Complete the card registration first!',
         'card_success': "✅ Card registered!",
         'back_to_settings': "⚙️ Back to settings",
+        'select_payment_method': '💸 *How did you pay?*',
+        'saved_expense': '✅ **Expense saved!**\n\nAmount: ${amount}\nCategory: {category}\nMethod: {payment_method}',
         'enter_card_details': (
             "💳 *How to register your card:*\n"
             "1. Enter the **last 4 digits**\n"

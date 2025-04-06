@@ -4,6 +4,7 @@ from database.db import insert_expense
 from keyboards.inline import get_categories_keyboard, get_post_registration_keyboard, get_description_keyboard
 from config.languages import translations
 from keyboards.inline import get_main_keyboard
+from keyboards.inline import get_payment_method_keyboard
 
 async def handle_buttons(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -12,11 +13,13 @@ async def handle_buttons(update: Update, context: CallbackContext):
     
     language = context.user_data.get('language', 'pt')
     amount = context.user_data.get('amount')
-    description = context.user_data.get('description', "")  # Captura a descrição
+    description = context.user_data.get('description', "")
     
+    # Verifica se é uma categoria válida
     if not query.data.startswith("CATEGORY_"):
         return
     
+    # Validação do valor
     if not amount:
         await context.bot.send_message(
             chat_id=query.message.chat_id,
@@ -25,36 +28,22 @@ async def handle_buttons(update: Update, context: CallbackContext):
         return
     
     try:
-        # →→→ Adicione o parâmetro 'description' ←←←
-        success = insert_expense(
-            user_id=query.message.chat_id,
-            amount=amount,
-            category=query.data,
-            description=description
+        # Armazena a categoria e solicita o método de pagamento
+        context.user_data['category'] = query.data
+        
+        # →→→ Novo: Mostra opções de método de pagamento ←←←
+        await context.bot.send_message(
+            chat_id=query.message.chat_id,
+            text=translations[language]['select_payment_method'],
+            reply_markup=get_payment_method_keyboard(language)
         )
         
-        if success:
-            await context.bot.send_message(
-                chat_id=query.message.chat_id,
-                text=translations[language]['saved_expense'].format(
-                    amount=f"{amount:.2f}",
-                    category=query.data.replace('CATEGORY_', '')
-                ),
-                reply_markup=get_post_registration_keyboard(language)
-            )
-        else:
-            await context.bot.send_message(
-                chat_id=query.message.chat_id,
-                text=translations[language]['db_error']
-            )
-            
     except Exception as e:
         await context.bot.send_message(
             chat_id=query.message.chat_id,
             text=translations[language]['db_error']
         )
-    
-    context.user_data.clear()  # Limpa todos os dados
+        context.user_data.clear()
 
 async def handle_enter_value(update: Update, context: CallbackContext):
     """Solicita valor com exemplo integrado"""
@@ -143,3 +132,46 @@ async def skip_description(update: Update, context: CallbackContext):
         
     except Exception as e:
         print(f"Erro ao pular descrição: {str(e)}")
+
+async def handle_payment_method(update: Update, context: CallbackContext):
+    query = update.callback_query
+    await query.answer()
+    await query.message.delete()
+    
+    language = context.user_data.get('language', 'pt')
+    payment_method = query.data.split('_')[1]  # Ex: "card", "cash", "pix"
+    
+    try:
+        # Recupera todos os dados do contexto
+        user_data = context.user_data
+        success = insert_expense(
+            user_id=query.message.chat_id,
+            amount=user_data['amount'],
+            category=user_data['category'],
+            description=user_data.get('description', ""),
+            payment_method=payment_method  # Novo parâmetro
+        )
+        
+        if success:
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text=translations[language]['saved_expense'].format(
+                    amount=f"{user_data['amount']:.2f}",
+                    category=user_data['category'].replace('CATEGORY_', ''),
+                    payment_method=payment_method.upper()  # Novo campo
+                ),
+                reply_markup=get_post_registration_keyboard(language)
+            )
+        else:
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text=translations[language]['db_error']
+            )
+            
+    except Exception as e:
+        await context.bot.send_message(
+            chat_id=query.message.chat_id,
+            text=translations[language]['db_error']
+        )
+    
+    context.user_data.clear()  # Limpa todos os dados

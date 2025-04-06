@@ -22,7 +22,7 @@ def process_receipt(image_path: str) -> str:
         img = Image.open(image_path)
         model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content([
-            "Extraia APENAS o valor total no formato numérico (ex: 50.99)",
+            "Extraia APENAS o valor total numérico (formato: 00.00). Exemplos válidos: 150.99, 45.50, 200.00",
             img
         ])
         
@@ -34,10 +34,11 @@ def process_receipt(image_path: str) -> str:
             user_id=user_id,
             amount=total,
             category="AUTO_RECOGNITION",
-            description=f"Registro automático - {os.path.basename(image_path)}"
+            description=f"Registro automático - {os.path.basename(image_path)}",
+            payment_method="auto"  # Campo obrigatório adicionado
         )
         
         return f"✅ Valor R${total:.2f} registrado automaticamente!"
-        
+ 
     except Exception as e:
         return f"⚠️ Erro: {str(e)}"

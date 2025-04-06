@@ -43,6 +43,7 @@ app.add_handler(CallbackQueryHandler(cards.start_add_card, pattern="^add_credit_
 app.add_handler(CallbackQueryHandler(commands.handle_language_change, pattern="^change_language$"))
 app.add_handler(CallbackQueryHandler(commands.handle_settings, pattern="^open_settings$"))
 app.add_handler(CallbackQueryHandler(handle_language_selection, pattern="^set_language_"))
+app.add_handler(CallbackQueryHandler(expenses.handle_payment_method, pattern="^PAYMENT_"))
 app.add_handler(CallbackQueryHandler(commands.handle_post_registration, pattern="^(register_again|back_to_main)$"))
 app.add_handler(CallbackQueryHandler(images.handle_send_image, pattern="^send_image$"))
 app.add_handler(CallbackQueryHandler(expenses.skip_description, pattern="^skip_description$"))

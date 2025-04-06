@@ -56,3 +56,11 @@ def get_card_delete_keyboard(cards, language='pt'):
     ]
     buttons.append([InlineKeyboardButton(translations[language]['back'], callback_data="cancel_delete")])
     return InlineKeyboardMarkup(buttons)
+
+def get_payment_method_keyboard(language: str = 'pt'):
+    buttons = [
+        [InlineKeyboardButton("💳 Cartão", callback_data="PAYMENT_card")],
+        [InlineKeyboardButton("💵 Dinheiro", callback_data="PAYMENT_cash")],
+        [InlineKeyboardButton("📱 Pix", callback_data="PAYMENT_pix")]
+    ]
+    return InlineKeyboardMarkup(buttons)

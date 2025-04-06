@@ -17,7 +17,8 @@ def create_table():
                 user_id BIGINT NOT NULL,
                 amount DECIMAL(10,2) NOT NULL,
                 category VARCHAR(50) NOT NULL,
-                description VARCHAR(255),  -- Nova coluna
+                description VARCHAR(255),
+                payment_method VARCHAR(20) NOT NULL,  -- Vírgula correta e sem comentário inline
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -51,15 +52,16 @@ def create_table():
         print(f"[ERRO DB] Falha ao recriar tabela: {str(e)}")
         raise
 
-def insert_expense(user_id, amount, category, description=""):
+def insert_expense(user_id, amount, category, payment_method ,description=""):
     try:
         conn = mysql.connector.connect(**Config.DB_CONFIG)
         cursor = conn.cursor()
         
-        # →→→ Query atualizada com 4 parâmetros ←←←
         cursor.execute(
-            "INSERT INTO expenses (user_id, amount, category, description) VALUES (%s, %s, %s, %s)",
-            (user_id, float(amount), category, description)
+            """INSERT INTO expenses 
+            (user_id, amount, category, description, payment_method) 
+            VALUES (%s, %s, %s, %s, %s)""",
+            (user_id, float(amount), category, description, payment_method)
         )
         
         conn.commit()
