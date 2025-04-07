@@ -36,8 +36,14 @@ def create_table():
                 language_code VARCHAR(10),
                 is_bot BOOLEAN,
                 registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                access_code VARCHAR(6)
-            )
+                access_code VARCHAR(6),
+                full_name VARCHAR(255),
+                email VARCHAR(255) UNIQUE,
+                cpf VARCHAR(14) UNIQUE,
+                birth_date DATE,
+                password_hash VARCHAR(255),
+                is_registered BOOLEAN DEFAULT FALSE
+            )  
         """)
 
         cursor.execute("""

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEDIE - Sucesso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="success-box">
+            <div class="login-header">
+                <div class="logo">
+                    <h1>GEDIE</h1>
+                    <p class="tagline">Gerenciador de Despesas Inteligente</p>
+                </div>
+            </div>
+            
+            <div class="login-body">
+                <div class="success-message">
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64">
+                            <circle cx="12" cy="12" r="11" fill="#27ae60"/>
+                            <path fill="white" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                        </svg>
+                    </div>
+                    <h2>{{ message }}</h2>
+                    <p>Estamos preparando seu dashboard para você começar a gerenciar suas finanças.</p>
+                    <p class="timer">Redirecionando em <span id="countdown">5</span> segundos...</p>
+                </div>
+                
+                <div class="button-container">
+                    <a href="{{ url_for('index') }}" class="btn-secondary">Voltar para Login</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 GEDIE - Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Contagem regressiva (em um cenário real, redirecionaria para o dashboard)
+        let timeLeft = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countdownTimer = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+                // Em uma implementação real:
+                // window.location.href = '/dashboard';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

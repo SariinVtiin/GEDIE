@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEDIE - Gerenciador de Despesas Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="logo">
+                    <h1>GEDIE</h1>
+                    <p class="tagline">Gerenciador de Despesas Inteligente</p>
+                </div>
+                
+                <div class="finance-icons">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                        <line x1="6" y1="15" x2="6" y2="15"></line>
+                        <line x1="10" y1="15" x2="10" y2="15"></line>
+                        <line x1="14" y1="15" x2="14" y2="15"></line>
+                        <line x1="18" y1="15" x2="18" y2="15"></line>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="login-body">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="first-access">Primeiro Acesso</button>
+                    <button class="tab-button" data-tab="regular-login">Acesso Regular</button>
+                </div>
+                
+                <div class="tab-description">
+                    <span id="first-access-description" class="active">
+                        Para seu primeiro acesso, use seu ID de usuário e código de acesso fornecidos pelo bot do Telegram.
+                    </span>
+                    <span id="regular-login-description" class="hidden">
+                        Se você já completou seu cadastro, faça login com seu e-mail e senha.
+                    </span>
+                </div>
+                
+                <!-- Mensagens de erro ou sucesso -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Formulário de Primeiro Acesso -->
+                <form id="first-access-form" class="tab-content active" action="{{ url_for('login') }}" method="POST">
+                    <input type="hidden" name="login_type" value="first_access">
+                    
+                    <div class="form-group input-with-icon">
+                        <label for="user-id">ID do Usuário</label>
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="user-id" name="user_id" placeholder="Digite seu ID de usuário" required>
+                    </div>
+                    
+                    <div class="form-group input-with-icon">
+                        <label for="access-code">Código de Acesso</label>
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="text" id="access-code" name="access_code" placeholder="Digite seu código de acesso" required>
+                    </div>
+                    
+                    <div class="form-help">
+                        <p>O seu ID de usuário e código de acesso foram gerados pelo bot do Telegram.</p>
+                        <p>Caso você já use o bot GEDIE, obtenha seu código usando o comando "Meu Código" no menu de configurações.</p>
+                        <p>Se você ainda não usa o bot, comece a usá-lo no Telegram primeiro: <strong>@gedie_bot</strong></p>
+                    </div>
+                    
+                    <div class="form-links text-center">
+                        <a href="{{ url_for('how_to_register') }}" class="link">Como obter acesso? (Passo a passo)</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Acessar</button>
+                </form>
+                
+                <!-- Formulário de Login Regular -->
+                <form id="regular-login-form" class="tab-content" action="{{ url_for('login') }}" method="POST">
+                    <input type="hidden" name="login_type" value="regular">
+                    
+                    <div class="form-group input-with-icon">
+                        <label for="email">E-mail</label>
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </span>
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    
+                    <div class="form-group input-with-icon">
+                        <label for="password">Senha</label>
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+                            <button type="button" class="toggle-password" aria-label="Mostrar senha">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-links">
+                        <a href="{{ url_for('forgot_password') }}" class="link">Esqueceu a senha?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Entrar</button>
+                </form>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 GEDIE - Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alternar entre abas
+            document.querySelectorAll('.tab-button').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Remover classe active de todos os botões e formulários
+                    document.querySelectorAll('.tab-button').forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+                    
+                    document.querySelectorAll('.tab-content').forEach(function(form) {
+                        form.classList.remove('active');
+                    });
+                    
+                    document.querySelectorAll('.tab-description span').forEach(function(desc) {
+                        desc.classList.remove('active');
+                        desc.classList.add('hidden');
+                    });
+                    
+                    // Adicionar classe active ao botão clicado
+                    this.classList.add('active');
+                    
+                    // Mostrar formulário e descrição correspondentes
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-form').classList.add('active');
+                    
+                    const tabDescription = document.getElementById(tabId + '-description');
+                    if (tabDescription) {
+                        tabDescription.classList.remove('hidden');
+                        tabDescription.classList.add('active');
+                    }
+                });
+            });
+            
+            // Mostrar/ocultar senha
+            document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    const passwordInput = this.parentElement.querySelector('input');
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Alternar ícone
+                    if (type === 'password') {
+                        this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+                    } else {
+                        this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

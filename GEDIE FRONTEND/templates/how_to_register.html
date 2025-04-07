@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEDIE - Como Obter Acesso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-box guide-box">
+            <div class="login-header">
+                <div class="logo">
+                    <h1>GEDIE</h1>
+                    <p class="tagline">Gerenciador de Despesas Inteligente</p>
+                </div>
+            </div>
+            
+            <div class="login-body">
+                <h2 class="page-title">Como Obter Acesso</h2>
+                
+                <p class="page-description">
+                    Siga o passo a passo abaixo para obter seu ID de usuário e código de acesso através do bot do Telegram.
+                </p>
+                
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Acesse o Telegram</h3>
+                            <p>Abra o aplicativo Telegram no seu celular ou computador. Caso ainda não tenha, você pode baixar o aplicativo na App Store, Google Play ou acessar <a href="https://web.telegram.org" target="_blank">web.telegram.org</a>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Encontre o Bot GEDIE</h3>
+                            <p>Na barra de pesquisa do Telegram, digite <strong>@gedie_bot</strong> e selecione o bot oficial GEDIE.</p>
+                            <div class="note">Certifique-se de que está selecionando o bot oficial para sua segurança.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Inicie o Bot</h3>
+                            <p>Clique no botão "Iniciar" ou digite o comando <code>/start</code> para iniciar o bot.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Acesse as Configurações</h3>
+                            <p>No menu principal, clique na opção "⚙️ Configurações" para acessar o menu de configurações.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Obtenha seu Código</h3>
+                            <p>No menu de configurações, clique em "Meu Código". O bot irá mostrar seu ID de usuário e código de acesso.</p>
+                            <div class="note">Você verá uma mensagem no formato:</div>
+                            <div class="code-example">
+                                <p>🔐 <strong>Código de Acesso:</strong> <code>ABC123</code></p>
+                                <p>🆔 <strong>User ID:</strong> <code>123456789</code></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3>Use as Informações para Fazer Login</h3>
+                            <p>Retorne a esta página de login e utilize seu ID de usuário e código de acesso no formulário de "Primeiro Acesso".</p>
+                            <p>Após esse primeiro acesso, você definirá sua senha e poderá usar o e-mail e senha para os próximos logins.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-links text-center" style="margin-top: 2rem;">
+                    <a href="{{ url_for('index') }}" class="btn-primary">Voltar para Login</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 GEDIE - Todos os direitos reservados</p>
+        </footer>
+    </div>
+</body>
+</html>
