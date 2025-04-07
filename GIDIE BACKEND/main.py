@@ -16,7 +16,10 @@ from handlers.commands import handle_exit
 from keyboards.inline import get_main_keyboard  # Importe o teclado
 from config.languages import translations  # Importe as traduções
 from handlers.expenses import handle_card_selection, handle_cancel_payment, handle_change_payment_method
-       
+from keyboards.inline import get_user_cards_keyboard, get_payment_method_keyboard
+from handlers.commands import handle_show_code
+from handlers.expenses import handle_payment_method
+
 from handlers import cards
 
 app = Application.builder().token(Config.TOKEN).build()
@@ -47,6 +50,7 @@ app.add_handler(CallbackQueryHandler(handle_language_selection, pattern="^set_la
 app.add_handler(CallbackQueryHandler(expenses.handle_payment_method, pattern="^PAYMENT_"))
 app.add_handler(CallbackQueryHandler(commands.handle_post_registration, pattern="^(register_again|back_to_main)$"))
 app.add_handler(CallbackQueryHandler(images.handle_send_image, pattern="^send_image$"))
+app.add_handler(CallbackQueryHandler(handle_show_code, pattern="^show_code$"))
 app.add_handler(CallbackQueryHandler(expenses.skip_description, pattern="^skip_description$"))
 app.add_handler(CallbackQueryHandler(cards.list_cards, pattern="^list_cards$"))
 app.add_handler(CallbackQueryHandler(handle_card_selection, pattern="^select_card_"))

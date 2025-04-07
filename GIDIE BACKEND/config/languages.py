@@ -47,6 +47,7 @@ translations = {
         'card_success': "✅ Cartão cadastrado!",
         'back_to_settings': "⚙️ Voltar às configurações",
         'select_payment_method': '💸 *Como você pagou?*',
+        'my_code': "Meu Código",
         'saved_expense': '✅ **Gasto salvo!**\n\nValor: R$ {amount}\nCategoria: {category}\nMétodo: {payment_method}',        
         'enter_card_details': (
             "💳 *Como cadastrar seu cartão:*\n"
@@ -103,6 +104,7 @@ translations = {
         'card_success': "✅ Card registered!",
         'back_to_settings': "⚙️ Back to settings",
         'select_payment_method': '💸 *How did you pay?*',
+        'my_code': "My Code",
         'saved_expense': '✅ **Expense saved!**\n\nAmount: ${amount}\nCategory: {category}\nMethod: {payment_method}',
         'enter_card_details': (
             "💳 *How to register your card:*\n"

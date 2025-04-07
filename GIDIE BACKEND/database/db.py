@@ -1,6 +1,9 @@
 # database/db.py
 import mysql.connector
 from config.config import Config
+from mysql.connector import Error
+import random
+import string
 
 def create_table():
     """Cria ou recria a tabela do zero com todas as colunas necessárias"""
@@ -23,12 +26,17 @@ def create_table():
             )
         """)
 
-        cursor.execute("""
+        cursor.execute(""" 
             CREATE TABLE IF NOT EXISTS users (
-                user_id BIGINT PRIMARY KEY,
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id BIGINT UNIQUE,
                 first_name VARCHAR(255),
+                last_name VARCHAR(255),
                 username VARCHAR(255),
-                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                language_code VARCHAR(10),
+                is_bot BOOLEAN,
+                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                access_code VARCHAR(6)
             )
         """)
 
@@ -76,26 +84,63 @@ def insert_expense(user_id, amount, category, payment_method ,description=""):
             cursor.close()
             conn.close()
 
-def register_user(user_id: int, first_name: str, username: str):
-    """Registra usuário na primeira interação"""
+def generate_access_code(length=6):
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choices(characters, k=length))
+
+def register_user(user_id: int, first_name: str, username: str, last_name: str = None, language_code: str = None, is_bot: bool = False):
+    """
+    Registra ou atualiza o usuário com informações adicionais.
+    
+    Parâmetros:
+      - user_id: ID único do usuário (do Telegram).
+      - first_name: Primeiro nome do usuário.
+      - username: Nome de usuário.
+      - last_name: Sobrenome (opcional).
+      - language_code: Código do idioma (opcional).
+      - is_bot: Indica se é um bot (normalmente False para usuários humanos).
+    """
+    conn = None
+    cursor = None
     try:
         conn = mysql.connector.connect(**Config.DB_CONFIG)
         cursor = conn.cursor()
         
-        cursor.execute(
-            """INSERT INTO users (user_id, first_name, username)
-               VALUES (%s, %s, %s)
-               ON DUPLICATE KEY UPDATE
-               first_name = VALUES(first_name),
-               username = VALUES(username)""",
-            (user_id, first_name, username)
-        )
+        access_code = generate_access_code()
         
+        query = """
+            INSERT INTO users (user_id, first_name, username, last_name, language_code, is_bot, access_code)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+                first_name = VALUES(first_name),
+                username = VALUES(username),
+                last_name = VALUES(last_name),
+                language_code = VALUES(language_code),
+                is_bot = VALUES(is_bot),
+                access_code = VALUES(access_code)
+        """
+        cursor.execute(query, (user_id, first_name, username, last_name, language_code, is_bot, access_code))
         conn.commit()
         return True
-    except Exception as e:
+    except Error as e:
         print(f"[ERRO] Falha ao registrar usuário: {str(e)}")
         return False
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None and conn.is_connected():
+            conn.close()
+
+def get_user_code(user_id):
+    try:
+        conn = mysql.connector.connect(**Config.DB_CONFIG)
+        cursor = conn.cursor()
+        cursor.execute("SELECT access_code FROM users WHERE user_id = %s", (user_id,))
+        result = cursor.fetchone()
+        return result[0] if result else None
+    except Exception as e:
+        print(f"Erro ao buscar código do usuário: {str(e)}")
+        return None
 
 def get_user_cards(user_id: int):
     """Retorna todos os cartões do usuário"""
