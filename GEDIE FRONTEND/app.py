@@ -277,6 +277,101 @@ def reset_password():
         flash('Ocorreu um erro ao processar sua solicitação', 'error')
         return redirect(url_for('forgot_password'))
 
+@app.route('/dashboard')
+def dashboard():
+    # Verificar se o usuário está autenticado
+    if 'is_authenticated' not in session or not session['is_authenticated']:
+        flash('Você precisa fazer login primeiro', 'error')
+        return redirect(url_for('index'))
+    
+    # Obter dados do usuário da sessão
+    user_id = session.get('user_id')
+    full_name = session.get('full_name', 'Usuário')
+    
+    try:
+        # Conectar ao banco de dados
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Buscar resumo de despesas por categoria
+        cursor.execute("""
+            SELECT 
+                category, 
+                SUM(amount) as total 
+            FROM expenses 
+            WHERE user_id = %s
+            GROUP BY category 
+            ORDER BY total DESC
+        """, (user_id,))
+        
+        categories = cursor.fetchall()
+        
+        # Buscar despesas recentes (últimas 5)
+        cursor.execute("""
+            SELECT 
+                id, 
+                amount, 
+                category, 
+                description, 
+                payment_method,
+                created_at
+            FROM expenses 
+            WHERE user_id = %s 
+            ORDER BY created_at DESC 
+            LIMIT 5
+        """, (user_id,))
+        
+        recent_expenses = cursor.fetchall()
+        
+        # Calcular o total de despesas do mês atual
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+        
+        cursor.execute("""
+            SELECT 
+                SUM(amount) as monthly_total 
+            FROM expenses 
+            WHERE 
+                user_id = %s AND 
+                MONTH(created_at) = %s AND 
+                YEAR(created_at) = %s
+        """, (user_id, current_month, current_year))
+        
+        monthly_result = cursor.fetchone()
+        monthly_total = monthly_result['monthly_total'] if monthly_result and monthly_result['monthly_total'] else 0
+        
+        # Buscar os cartões do usuário
+        cursor.execute("""
+            SELECT card_id, last_four, nickname 
+            FROM credit_cards 
+            WHERE user_id = %s
+        """, (user_id,))
+        
+        cards = cursor.fetchall()
+        
+        cursor.close()
+        conn.close()
+        
+        # Enviar dados para o template
+        return render_template(
+            'dashboard.html',
+            full_name=full_name,
+            categories=categories,
+            recent_expenses=recent_expenses,
+            monthly_total=monthly_total,
+            cards=cards
+        )
+        
+    except Exception as e:
+        print(f"Erro ao carregar dashboard: {str(e)}")
+        flash('Erro ao carregar os dados do dashboard', 'error')
+        return redirect(url_for('index'))
+
+@app.route('/success', methods=['GET'])
+def success_page():
+    message = request.args.get('message', 'Operação realizada com sucesso!')
+    return render_template('success.html', message=message)
+
 @app.route('/logout')
 def logout():
     session.clear()

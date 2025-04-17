@@ -42,7 +42,7 @@
     </div>
     
     <script>
-        // Contagem regressiva (em um cenário real, redirecionaria para o dashboard)
+        // Contagem regressiva (com redirecionamento para o dashboard)
         let timeLeft = 5;
         const countdownElement = document.getElementById('countdown');
         
@@ -52,8 +52,8 @@
             
             if (timeLeft <= 0) {
                 clearInterval(countdownTimer);
-                // Em uma implementação real:
-                // window.location.href = '/dashboard';
+                // Redireciona para o dashboard
+                window.location.href = '/dashboard';
             }
         }, 1000);
     </script>
