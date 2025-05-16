@@ -9,11 +9,11 @@ app.secret_key = os.urandom(24)
 
 # Configuração do banco de dados a partir do arquivo de configuração
 DB_CONFIG = {
-    'host': 'maglev.proxy.rlwy.net',
+    'host': 'localhost',
     'user': 'root',
-    'password': 'JaZeyqeyVUiucaTBBdtvdehXNNprhhSv',
-    'database': 'railway',
-    'port': 10053
+    'password': 'sariin072409',
+    'database': 'expenses',
+    'port': 3306
 }
 
 def get_db_connection():

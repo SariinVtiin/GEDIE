@@ -2,11 +2,11 @@
 class Config:
     TOKEN = "8030810458:AAGFwaaOm-GfKJh27WqjMgtuaBDRdL5XBxg"
     DB_CONFIG = {
-        'host': 'maglev.proxy.rlwy.net',
+        'host': 'localhost',
         'user': 'root',
-        'password': 'JaZeyqeyVUiucaTBBdtvdehXNNprhhSv',
-        'database': 'railway',
-        'port': 10053
+        'password': 'sariin072409',
+        'database': 'expenses',
+        'port': 3306
     }
     DEFAULT_LANGUAGE = 'pt'
 
